@@ -26,8 +26,9 @@ export default function TableFromJson({jsonData}) {
 
     const [rows,setRows] = useState([]);
     const [cols,setCols] = useState([]);
-    const [total,setTotal] = useState();
-    const [data,setData] = useState();
+    const [rowTotal,setRowTotal] = useState([]);
+    const [colTotal,setColTotal] = useState([]);
+    const [data,setData] = useState([]);
     const classes = useStyles();
 
   useEffect(() => {
@@ -36,29 +37,48 @@ export default function TableFromJson({jsonData}) {
     // * Calculate rows
     const jobs = new Set(usersData.map(user => user.job));
     const rowHeadings = [...jobs];
-    setRows(rowHeadings);
-
+    setRows([...rowHeadings,"Total"]);
+    
     // * Calculate columns
     const colHeadings = usersData.map(user => user.name);
     const ids = usersData.map(user => user.id);
     setCols(["Jobs/Name",...colHeadings,"Total"]);
 
-    // * Calculate table data for each cell and total column.
+    // * Calculate table data for each cell and total columns.
     var mappedData={};
     var rowsTotal={};
+    var colsTotal={};
+
+    // * Initialized the table data(mappedData) to 0.
     for(var i=0;i<rowHeadings.length;i++){
         mappedData[rowHeadings[i]] = {};
         for(var j=0;j<ids.length;j++){
             mappedData[rowHeadings[i]][ids[j]] = 0;
-            rowsTotal[rowHeadings[i]] = 0;
         }
     }
 
+    // * Initialized the rows total to 0.
+    for(var i=0;i<rowHeadings.length; i++){
+      rowsTotal[rowHeadings[i]] = 0;
+    }
+
+    // * Initialized the cols total to 0.
+    for(var i=0;i<ids.length;i++){
+      colsTotal[ids[i]] = 0;
+    }
+    
+    // * Computing the table data.
     for(var i=0;i<usersData.length;i++){
         mappedData[usersData[i].job][usersData[i].id] = usersData[i].target;
         rowsTotal[usersData[i].job] += usersData[i].target;
+        colsTotal[usersData[i].id] += usersData[i].target;
     }
-    setTotal(rowsTotal);
+
+    // * Add column total data to table data.
+    mappedData["Total"] = colsTotal;
+
+    setRowTotal(rowsTotal);
+    setColTotal(colsTotal);
     setData(mappedData);
   },[]);
 
@@ -93,7 +113,7 @@ export default function TableFromJson({jsonData}) {
               )
             }
             <TableCell align="right" style={{border: "1px solid rgba(0,0,1,0.2)"}}>
-              {total[row]}
+              {rowTotal[row]}
             </TableCell>
             </TableRow>
           ))
