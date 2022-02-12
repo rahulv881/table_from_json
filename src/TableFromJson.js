@@ -2,6 +2,8 @@ import React , {useEffect, useState} from 'react'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { Paper, TableContainer,TableRow, TableHead,TableCell ,TableBody,Table } from '@material-ui/core';
 
+import { TOTAL,JOBS_NAMES } from './Constants.js';
+
 const useStyles = makeStyles((theme) =>
   createStyles({
     columnHeader: {
@@ -37,12 +39,12 @@ export default function TableFromJson({jsonData}) {
     // * Calculate rows
     const jobs = new Set(usersData.map(user => user.job));
     const rowHeadings = [...jobs];
-    setRows([...rowHeadings,"Total"]);
+    setRows([...rowHeadings,TOTAL]);
     
     // * Calculate columns
     const colHeadings = usersData.map(user => user.name);
     const ids = usersData.map(user => user.id);
-    setCols(["Jobs/Name",...colHeadings,"Total"]);
+    setCols([JOBS_NAMES,...colHeadings,TOTAL]);
 
     // * Calculate table data for each cell and total columns.
     var mappedData={};
@@ -75,7 +77,7 @@ export default function TableFromJson({jsonData}) {
     }
 
     // * Add column total data to table data.
-    mappedData["Total"] = colsTotal;
+    mappedData[TOTAL] = colsTotal;
 
     setRowTotal(rowsTotal);
     setColTotal(colsTotal);
