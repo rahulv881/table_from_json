@@ -92,14 +92,14 @@ export default function TableFromJson({jsonData}) {
         <TableHead className={classes.columnHeader}
         >
           <TableRow >
-            {cols.map(col => <TableCell className={classes.columnHeaderCell}>{col}</TableCell>)}
+            {cols.map((col,index) => <TableCell key={col+index} className={classes.columnHeaderCell}>{col}</TableCell>)}
           </TableRow>
         </TableHead>
         <TableBody>
           {
           rows.map((row,index) => (
             <TableRow
-              key={row}
+              key={row+index}
               sx={{'&:last-child td, &:last-child th': { border: 0 } }}
             >
              <TableCell component="th" scope="row" 
@@ -108,8 +108,8 @@ export default function TableFromJson({jsonData}) {
                 {row}
               </TableCell>
             {
-              Object.values(data[row]).map(val => 
-                <TableCell align="right" style={{border: "1px solid rgba(0,0,1,0.2)"}}>
+              Object.values(data[row]).map((val,index) => 
+                <TableCell key={index} align="right" style={{border: "1px solid rgba(0,0,1,0.2)"}}>
                   {val}
                 </TableCell>
               )
