@@ -29,7 +29,6 @@ export default function TableFromJson({jsonData}) {
     const [rows,setRows] = useState([]);
     const [cols,setCols] = useState([]);
     const [rowTotal,setRowTotal] = useState([]);
-    const [colTotal,setColTotal] = useState([]);
     const [data,setData] = useState([]);
     const classes = useStyles();
 
@@ -80,7 +79,6 @@ export default function TableFromJson({jsonData}) {
     mappedData[TOTAL] = colsTotal;
 
     setRowTotal(rowsTotal);
-    setColTotal(colsTotal);
     setData(mappedData);
   },[]);
 
