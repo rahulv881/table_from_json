@@ -34,22 +34,23 @@ export default function TableFromJson({jsonData}) {
     JSON.stringify(jsonData);
     const usersData = JSON.parse(jsonData);
     // * Calculate rows
-    const rowsArr = usersData.map(user => user.job);
-    setRows(rowsArr);
+    const jobs = new Set(usersData.map(user => user.job));
+    const rowHeadings = [...jobs];
+    setRows(rowHeadings);
 
     // * Calculate columns
-    const colsArr = usersData.map(user => user.name);
+    const colHeadings = usersData.map(user => user.name);
     const ids = usersData.map(user => user.id);
-    setCols(["Jobs/Name",...rowsArr,"Total"]);
+    setCols(["Jobs/Name",...colHeadings,"Total"]);
 
     // * Calculate table data for each cell and total column.
     var mappedData={};
     var rowsTotal={};
-    for(var i=0;i<rowsArr.length;i++){
-        mappedData[rowsArr[i]] = {};
+    for(var i=0;i<rowHeadings.length;i++){
+        mappedData[rowHeadings[i]] = {};
         for(var j=0;j<ids.length;j++){
-            mappedData[rowsArr[i]][ids[j]] = 0;
-            rowsTotal[rowsArr[i]] = 0;
+            mappedData[rowHeadings[i]][ids[j]] = 0;
+            rowsTotal[rowHeadings[i]] = 0;
         }
     }
 
